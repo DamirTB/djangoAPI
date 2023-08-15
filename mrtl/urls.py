@@ -20,5 +20,5 @@ from mainapp.views import PersonAPIview
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/v1/personlist', PersonAPIview.as_view()),
+    path('', include('mainapp.urls')),
 ]
