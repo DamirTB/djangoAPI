@@ -5,4 +5,5 @@ urlpatterns = [
     path('', views.index),
     path('api/personlist', views.PersonAPIview.as_view()),
     path('api/itemlist', views.ItemAPIview.as_view()),
+    path('api/personlist/<int:pk>/', views.PersonAPIview.as_view()),
 ]

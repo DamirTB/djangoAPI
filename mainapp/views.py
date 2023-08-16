@@ -14,18 +14,30 @@ def index(request):
 
 class PersonAPIview(APIView):
     def get(self, request):
-        lst = Person.objects.all().values()
-        return Response({'post': list(lst)})
+        lst = Person.objects.all()
+        return Response({'post': PersonSerializer(lst, many=True).data})
     def post(self, request):
-        post_new = Person.objects.create(
-            first_name=request.data['first_name'],
-            last_name=request.data['sur_name']
-        )
-        return Response({'post' : model_to_dict(post_new)})
+        serializer = PersonSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({'post' : serializer.data})
+    def put(self, request, *args, **kwargs):
+        pk = kwargs.get("pk", None)
+        if not pk:
+            return Response({"Error" : "Method PUT not allowed"})
+        try:
+            instance = Person.objects.get(pk=pk)
+        except:
+            return Response({"Error" : "Method PUT not allowed"})
+        serializer = PersonSerializer(data=request.data, instance=instance)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({'post' : serializer.data})
+
 
 #class PersonAPIview(generics.ListAPIView):
 #    queryset = Person.objects.all()
-#    serializer_class = PersonSerializer
+#    serializer_class = PersonSerializer    
 
 class ItemAPIview(generics.ListAPIView):
     queryset = Item.objects.all()
