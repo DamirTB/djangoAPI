@@ -1,10 +1,9 @@
-from django.urls import path
+from django.urls import path, include
 from . import views
 
 urlpatterns = [
-    path('', views.index),
-    path('api/personlist', views.PersonAPIList.as_view()),
-    path('api/itemlist', views.ItemAPIview.as_view()),
-    path('api/personlist/<int:pk>/', views.PersonAPIUpdate.as_view()),
-    path('api/persondetail/<int:pk>', views.PersonAPIDetail.as_view()),
+    path('personlist/', views.PersonAPIList.as_view(), name="personlist"),
+    path('itemlist/', views.ItemAPIview.as_view()),
+    path('personlist/<int:pk>/', views.PersonAPIDetail.as_view()),
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 ]

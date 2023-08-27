@@ -4,6 +4,8 @@ from django.forms import model_to_dict
 from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser, IsAuthenticated
+
 from .models import Person, Item
 from .serializers import PersonSerializer, ItemSerializer
 
@@ -14,14 +16,12 @@ def index(request):
 
 class PersonAPIList(generics.ListCreateAPIView):
     queryset = Person.objects.all()
+    permission_classes = [IsAuthenticated]
     serializer_class = PersonSerializer
-
-class PersonAPIUpdate(generics.UpdateAPIView):
-    queryset = Person.objects.all()
-    serializer_class = PersonSerializer 
 
 class PersonAPIDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Person.objects.all()
+    permission_classes = [IsAdminUser]
     serializer_class = PersonSerializer 
 
 class ItemAPIview(generics.ListAPIView):
